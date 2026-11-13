@@ -1,0 +1,51 @@
+{
+  "params": "maize_greeley",
+  "n": 24,
+  "n_completed": 24,
+  "yield_fit": {
+    "n": 24,
+    "obs_mean": 8.45,
+    "sim_mean": 14.21,
+    "bias": 5.76,
+    "rmse": 5.91,
+    "r": 0.94
+  },
+  "biomass_fit": {
+    "n": 24,
+    "obs_mean": 16.53,
+    "sim_mean": 28.42,
+    "bias": 11.89,
+    "rmse": 12.21,
+    "r": 0.98
+  },
+  "by_year": {
+    "2008": {
+      "r": 0.973366230845783,
+      "sim_driest": 12.31,
+      "sim_wettest": 18.84,
+      "obs_driest": 7.45628,
+      "obs_wettest": 11.17766
+    },
+    "2009": {
+      "r": 0.9821796815982279,
+      "sim_driest": 9.74,
+      "sim_wettest": 18.9,
+      "obs_driest": 5.019033961248655,
+      "obs_wettest": 10.225178731310145
+    },
+    "2010": {
+      "r": 0.9692131920488203,
+      "sim_driest": 8.01,
+      "sim_wettest": 15.35,
+      "obs_driest": 4.6516167922497305,
+      "obs_wettest": 9.43661800197512
+    },
+    "2011": {
+      "r": 0.9871310896900332,
+      "sim_driest": 9.08,
+      "sim_wettest": 19.18,
+      "obs_driest": 3.35148125,
+      "obs_wettest": 11.525799999999998
+    }
+  }
+}

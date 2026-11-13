@@ -1,0 +1,21 @@
+{
+  "radicle": "1.0.0",
+  "python": "3.15.0",
+  "written": [
+    "wheat_egypt.json",
+    "maize_greeley_placeholder.json",
+    "maize_greeley_calibrated_insample.json",
+    "et0_greeley.json",
+    "maize_leave_one_year_out.json"
+  ],
+  "skipped": {},
+  "params": {
+    "wheat": "530f8e9f2af70e28",
+    "maize_greeley": "f0accce8a342f59d",
+    "maize_greeley_calibrated": "763c7759bbbe1f95"
+  },
+  "data": {
+    "data/external/egypt-nile-wheat/x": "16f7761966395256",
+    "data/external/greeley-maize": "04feff4a60672b35"
+  }
+}

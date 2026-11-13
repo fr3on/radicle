@@ -1,0 +1,11 @@
+{
+  "fit": {
+    "n": 601,
+    "obs_mean": 4.95,
+    "sim_mean": 4.82,
+    "bias": -0.13,
+    "rmse": 0.41,
+    "r": 0.97
+  },
+  "note": "pairs are (published ASCE grass ETo, radicle FAO-56 ET0)"
+}

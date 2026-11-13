@@ -1,0 +1,72 @@
+cff-version: 1.2.0
+message: "If you use radicle in your work, please cite it with the metadata below, and cite the datasets you run it on (see references)."
+title: "radicle: a wheat and maize field simulator"
+type: software
+version: 1.0.0
+date-released: 2026-11-13
+license: MIT
+authors:
+  - alias: fr3on
+    email: ahmed@0x200.com
+repository-code: "https://github.com/fr3on/radicle"
+url: "https://github.com/fr3on/radicle"
+abstract: >-
+  radicle simulates a wheat or maize field season in pure Python: FAO-56 reference evapotranspiration,
+  a root-zone water and salt balance, growth by normalised water productivity, and weather-driven disease.
+  It reads field data from CSV, DSSAT, ICASA and Excel sources and reproduces every reported result with
+  one command. Most parameters are uncalibrated placeholders and each value carries a provenance label;
+  maize is calibrated for one site (Greeley, Colorado) and should not be extrapolated.
+keywords:
+  - crop model
+  - crop simulation
+  - agronomy
+  - evapotranspiration
+  - FAO-56
+  - soil salinity
+  - irrigation
+  - wheat
+  - maize
+  - reproducible research
+references:
+  - type: report
+    title: "Crop evapotranspiration: guidelines for computing crop water requirements (FAO Irrigation and Drainage Paper 56)"
+    authors:
+      - family-names: Allen
+        given-names: Richard G.
+      - family-names: Pereira
+        given-names: Luis S.
+      - family-names: Raes
+        given-names: Dirk
+      - family-names: Smith
+        given-names: Martin
+    year: 1998
+    institution:
+      name: Food and Agriculture Organization of the United Nations
+      city: Rome
+    notes: "Method used for reference evapotranspiration, the crop coefficient curve and the water balance."
+  - type: data
+    title: "Experimental and simulated wheat data from across a temperature gradient along the River Nile in Egypt"
+    authors:
+      - family-names: Kheir
+        given-names: Ahmed Mohammed Saad
+      - family-names: Abdelaal
+        given-names: Aly
+      - family-names: Hoogenboom
+        given-names: Gerrit
+      - family-names: Asseng
+        given-names: Senthold
+    year: 2020
+    doi: "10.18174/odjar.v6i0.16318"
+    publisher:
+      name: Wageningen University and Research (Open Data Journal for Agricultural Research)
+    license: CC-BY-4.0
+  - type: data
+    title: "USDA-ARS Colorado Maize Water Productivity Dataset 2008-2011"
+    authors:
+      - family-names: Trout
+        given-names: Thomas
+    year: 2016
+    doi: "10.15482/USDA.ADC/1254006"
+    publisher:
+      name: Ag Data Commons
+    notes: "Public domain (US government work)."

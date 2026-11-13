@@ -1,0 +1,26 @@
+[project]
+name = "radicle"
+version = "1.0.0"
+description = "Crop simulator for wheat and maize: water balance, salinity, growth and disease. Pure Python, reproducible."
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "fr3on", email = "ahmed@0x200.com"}]
+classifiers = ["Programming Language :: Python :: 3", "Topic :: Scientific/Engineering"]
+dependencies = []
+
+[project.scripts]
+radicle = "radicle.cli:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

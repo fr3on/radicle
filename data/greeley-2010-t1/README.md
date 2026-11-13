@@ -1,0 +1,1 @@
+Greeley CO limited-irrigation maize, 2010, treatment 1 (irrigation 366 mm). USDA-ARS, public domain, DOI 10.15482/USDA.ADC/1254006. Weather gaps filled, assumptions listed in src/radicle/ingest/greeley.py. Observed values are dry grain yield and final biomass at harvest (2010-10-19). Run: radicle run <dir> --params maize_greeley

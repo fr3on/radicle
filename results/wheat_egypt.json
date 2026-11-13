@@ -1,0 +1,164 @@
+{
+  "params": "wheat",
+  "n_matured": 22,
+  "yield_fit": {
+    "n": 22,
+    "obs_mean": 7.37,
+    "sim_mean": 5.84,
+    "bias": -1.53,
+    "rmse": 1.65,
+    "r": 0.5
+  },
+  "pairs": [
+    [
+      6.8,
+      4.99
+    ],
+    [
+      6.3,
+      4.25
+    ],
+    [
+      7.3,
+      4.99
+    ],
+    [
+      7.15,
+      4.25
+    ],
+    [
+      7.4,
+      6.29
+    ],
+    [
+      7.15,
+      5.67
+    ],
+    [
+      7.7,
+      6.29
+    ],
+    [
+      7.4,
+      5.67
+    ],
+    [
+      6.5,
+      6.29
+    ],
+    [
+      6.2,
+      5.67
+    ],
+    [
+      8.1,
+      6.38
+    ],
+    [
+      8.02,
+      5.71
+    ],
+    [
+      7.5,
+      6.38
+    ],
+    [
+      7.3,
+      5.71
+    ],
+    [
+      8.0,
+      6.38
+    ],
+    [
+      7.8,
+      5.71
+    ],
+    [
+      7.83,
+      6.51
+    ],
+    [
+      7.78,
+      6.13
+    ],
+    [
+      7.2,
+      6.51
+    ],
+    [
+      7.0,
+      6.13
+    ],
+    [
+      7.905,
+      6.51
+    ],
+    [
+      7.85,
+      6.13
+    ]
+  ],
+  "sites": [
+    "ASWN",
+    "ASWN",
+    "ASWN",
+    "ASWN",
+    "BSUF",
+    "BSUF",
+    "BSUF",
+    "BSUF",
+    "BSUF",
+    "BSUF",
+    "MNFY",
+    "MNFY",
+    "MNFY",
+    "MNFY",
+    "MNFY",
+    "MNFY",
+    "SARS",
+    "SARS",
+    "SARS",
+    "SARS",
+    "SARS",
+    "SARS"
+  ],
+  "anthesis_sim_days": 69.68181818181819,
+  "anthesis_obs_days": 67.36363636363636,
+  "maturity_sim_days": 124.95454545454545,
+  "maturity_obs_days": 103.95454545454545,
+  "by_site": {
+    "ASWN": {
+      "name": "Aswan",
+      "yield_sim": 4.62,
+      "yield_obs": 6.8875,
+      "maturity_sim_days": 116.5,
+      "maturity_obs_days": 99.0,
+      "irrigation_mm": 457.5
+    },
+    "BSUF": {
+      "name": "Beni Suef",
+      "yield_sim": 5.98,
+      "yield_obs": 7.058333333333334,
+      "maturity_sim_days": 131,
+      "maturity_obs_days": 103.5,
+      "irrigation_mm": 469.3
+    },
+    "MNFY": {
+      "name": "Menofya",
+      "yield_sim": 6.045,
+      "yield_obs": 7.786666666666666,
+      "maturity_sim_days": 126,
+      "maturity_obs_days": 106.0,
+      "irrigation_mm": 460.7
+    },
+    "SARS": {
+      "name": "Sakha",
+      "yield_sim": 6.32,
+      "yield_obs": 7.594166666666666,
+      "maturity_sim_days": 123.5,
+      "maturity_obs_days": 105.66666666666667,
+      "irrigation_mm": 400.65
+    }
+  }
+}

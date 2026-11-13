@@ -1,0 +1,304 @@
+{
+  "summary": {
+    "uncalibrated": {
+      "bias": 5.76,
+      "rmse": 5.91,
+      "r": 0.94,
+      "biomass_bias": 11.9
+    },
+    "calibrated (held-out year)": {
+      "bias": -0.3,
+      "rmse": 0.96,
+      "r": 0.91,
+      "biomass_bias": 0.1
+    }
+  },
+  "folds": {
+    "2008": {
+      "wp_g_m2": 20,
+      "harvest_index": 0.5,
+      "p_depletion": 0.4
+    },
+    "2009": {
+      "wp_g_m2": 20,
+      "harvest_index": 0.5,
+      "p_depletion": 0.4
+    },
+    "2010": {
+      "wp_g_m2": 20,
+      "harvest_index": 0.45,
+      "p_depletion": 0.5
+    },
+    "2011": {
+      "wp_g_m2": 20,
+      "harvest_index": 0.5,
+      "p_depletion": 0.4
+    }
+  },
+  "records": [
+    {
+      "year": 2008,
+      "trno": 1,
+      "irrigation_mm": 438.1,
+      "obs": 11.17766,
+      "uncalibrated": 18.84,
+      "heldout": 10.89,
+      "obs_biomass": 21.471741468458415,
+      "uncalibrated_biomass": 37.676,
+      "heldout_biomass": 21.77
+    },
+    {
+      "year": 2008,
+      "trno": 2,
+      "irrigation_mm": 338.0,
+      "obs": 10.930074999999999,
+      "uncalibrated": 17.55,
+      "heldout": 10.19,
+      "obs_biomass": 20.952291586177946,
+      "uncalibrated_biomass": 35.1,
+      "heldout_biomass": 20.383
+    },
+    {
+      "year": 2008,
+      "trno": 3,
+      "irrigation_mm": 282.2,
+      "obs": 10.647845,
+      "uncalibrated": 16.51,
+      "heldout": 9.56,
+      "obs_biomass": 19.435111622630462,
+      "uncalibrated_biomass": 33.023,
+      "heldout_biomass": 19.114
+    },
+    {
+      "year": 2008,
+      "trno": 4,
+      "irrigation_mm": 271.4,
+      "obs": 9.586525,
+      "uncalibrated": 15.75,
+      "heldout": 9.12,
+      "obs_biomass": 17.439251905608508,
+      "uncalibrated_biomass": 31.5,
+      "heldout_biomass": 18.238
+    },
+    {
+      "year": 2008,
+      "trno": 5,
+      "irrigation_mm": 180.2,
+      "obs": 7.612604999999999,
+      "uncalibrated": 13.39,
+      "heldout": 7.73,
+      "obs_biomass": 13.743937232013623,
+      "uncalibrated_biomass": 26.776,
+      "heldout_biomass": 15.457
+    },
+    {
+      "year": 2008,
+      "trno": 6,
+      "irrigation_mm": 136.5,
+      "obs": 7.45628,
+      "uncalibrated": 12.31,
+      "heldout": 7.16,
+      "obs_biomass": 13.889507706270518,
+      "uncalibrated_biomass": 24.622,
+      "heldout_biomass": 14.315999999999999
+    },
+    {
+      "year": 2009,
+      "trno": 1,
+      "irrigation_mm": 418.3560606060606,
+      "obs": 10.225178731310145,
+      "uncalibrated": 18.9,
+      "heldout": 10.99,
+      "obs_biomass": 20.603561852138196,
+      "uncalibrated_biomass": 37.795,
+      "heldout_biomass": 21.975
+    },
+    {
+      "year": 2009,
+      "trno": 2,
+      "irrigation_mm": 346.41505050505054,
+      "obs": 9.792235064585576,
+      "uncalibrated": 17.51,
+      "heldout": 10.17,
+      "obs_biomass": 21.270624079354626,
+      "uncalibrated_biomass": 35.024,
+      "heldout_biomass": 20.345
+    },
+    {
+      "year": 2009,
+      "trno": 3,
+      "irrigation_mm": 299.1778787878788,
+      "obs": 9.435270000000001,
+      "uncalibrated": 16.19,
+      "heldout": 9.55,
+      "obs_biomass": 19.118014992493926,
+      "uncalibrated_biomass": 32.39,
+      "heldout_biomass": 19.093
+    },
+    {
+      "year": 2009,
+      "trno": 4,
+      "irrigation_mm": 244.3250505050505,
+      "obs": 8.71824060818084,
+      "uncalibrated": 14.64,
+      "heldout": 8.64,
+      "obs_biomass": 17.8829146738998,
+      "uncalibrated_biomass": 29.283,
+      "heldout_biomass": 17.289
+    },
+    {
+      "year": 2009,
+      "trno": 5,
+      "irrigation_mm": 167.84,
+      "obs": 6.796101092622825,
+      "uncalibrated": 11.93,
+      "heldout": 7.04,
+      "obs_biomass": 14.175443689480598,
+      "uncalibrated_biomass": 23.851999999999997,
+      "heldout_biomass": 14.078
+    },
+    {
+      "year": 2009,
+      "trno": 6,
+      "irrigation_mm": 109.63232323232323,
+      "obs": 5.019033961248655,
+      "uncalibrated": 9.74,
+      "heldout": 5.77,
+      "obs_biomass": 11.503,
+      "uncalibrated_biomass": 19.488,
+      "heldout_biomass": 11.535
+    },
+    {
+      "year": 2010,
+      "trno": 1,
+      "irrigation_mm": 365.5,
+      "obs": 9.43661800197512,
+      "uncalibrated": 15.35,
+      "heldout": 8.17,
+      "obs_biomass": 18.31307342901283,
+      "uncalibrated_biomass": 30.698,
+      "heldout_biomass": 18.145
+    },
+    {
+      "year": 2010,
+      "trno": 2,
+      "irrigation_mm": 303.0,
+      "obs": 9.66802260495156,
+      "uncalibrated": 14.07,
+      "heldout": 7.51,
+      "obs_biomass": 18.160100105975854,
+      "uncalibrated_biomass": 28.148000000000003,
+      "heldout_biomass": 16.692999999999998
+    },
+    {
+      "year": 2010,
+      "trno": 3,
+      "irrigation_mm": 252.20000000000002,
+      "obs": 8.842604413347686,
+      "uncalibrated": 12.59,
+      "heldout": 6.72,
+      "obs_biomass": 15.775498737675207,
+      "uncalibrated_biomass": 25.186999999999998,
+      "heldout_biomass": 14.929
+    },
+    {
+      "year": 2010,
+      "trno": 4,
+      "irrigation_mm": 219.3,
+      "obs": 7.8713238646289065,
+      "uncalibrated": 12.04,
+      "heldout": 6.42,
+      "obs_biomass": 14.705080304144643,
+      "uncalibrated_biomass": 24.076,
+      "heldout_biomass": 14.269
+    },
+    {
+      "year": 2010,
+      "trno": 5,
+      "irrigation_mm": 152.7,
+      "obs": 6.042714747039828,
+      "uncalibrated": 9.8,
+      "heldout": 5.22,
+      "obs_biomass": 11.166255616495185,
+      "uncalibrated_biomass": 19.594,
+      "heldout_biomass": 11.61
+    },
+    {
+      "year": 2010,
+      "trno": 6,
+      "irrigation_mm": 99.6,
+      "obs": 4.6516167922497305,
+      "uncalibrated": 8.01,
+      "heldout": 4.27,
+      "obs_biomass": 9.028162120909421,
+      "uncalibrated_biomass": 16.016,
+      "heldout_biomass": 9.479
+    },
+    {
+      "year": 2011,
+      "trno": 1,
+      "irrigation_mm": 484.90000000000003,
+      "obs": 11.525799999999998,
+      "uncalibrated": 19.18,
+      "heldout": 11.18,
+      "obs_biomass": 21.916422227550825,
+      "uncalibrated_biomass": 38.358000000000004,
+      "heldout_biomass": 22.353
+    },
+    {
+      "year": 2011,
+      "trno": 2,
+      "irrigation_mm": 388.3,
+      "obs": 10.56102125,
+      "uncalibrated": 17.05,
+      "heldout": 10.04,
+      "obs_biomass": 19.772923467194516,
+      "uncalibrated_biomass": 34.1,
+      "heldout_biomass": 20.088
+    },
+    {
+      "year": 2011,
+      "trno": 3,
+      "irrigation_mm": 328.2,
+      "obs": 8.761805,
+      "uncalibrated": 15.04,
+      "heldout": 8.9,
+      "obs_biomass": 17.343249665700906,
+      "uncalibrated_biomass": 30.072,
+      "heldout_biomass": 17.794
+    },
+    {
+      "year": 2011,
+      "trno": 4,
+      "irrigation_mm": 306.3,
+      "obs": 8.6980075,
+      "uncalibrated": 14.23,
+      "heldout": 8.42,
+      "obs_biomass": 17.13130092041068,
+      "uncalibrated_biomass": 28.456999999999997,
+      "heldout_biomass": 16.84
+    },
+    {
+      "year": 2011,
+      "trno": 5,
+      "irrigation_mm": 221.6,
+      "obs": 6.11082875,
+      "uncalibrated": 11.4,
+      "heldout": 6.74,
+      "obs_biomass": 11.945489817859826,
+      "uncalibrated_biomass": 22.809,
+      "heldout_biomass": 13.472999999999999
+    },
+    {
+      "year": 2011,
+      "trno": 6,
+      "irrigation_mm": 156.9,
+      "obs": 3.35148125,
+      "uncalibrated": 9.08,
+      "heldout": 5.34,
+      "obs_biomass": 9.993731004160797,
+      "uncalibrated_biomass": 18.15,
+      "heldout_biomass": 10.689
+    }
+  ]
+}
