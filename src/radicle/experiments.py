@@ -13,7 +13,7 @@ from pathlib import Path
 
 from . import __version__
 from .calibrate import fit_grid
-from .ingest import dssat, greeley
+from .ingest import dssat, greeley, nzwheat
 from .metrics import FitStats
 from .models.crop import simulate
 from .models.et0 import et0_daily
@@ -21,6 +21,7 @@ from .models.params import PARAMS_DIR, CropParams, load_params
 
 EGYPT_ROOT = "data/external/egypt-nile-wheat/x"
 GREELEY_ROOT = "data/external/greeley-maize"
+NZ_ROOT = "data/external/nz-wheat"
 SITE_NAMES = {"ASWN": "Aswan", "BSUF": "Beni Suef", "MNFY": "Menofya", "SARS": "Sakha"}
 MAIZE_GRID = {"wp_g_m2": [14 + 2 * i for i in range(14)], "harvest_index": [0.40, 0.45, 0.50, 0.55, 0.60],
               "p_depletion": [0.40, 0.50, 0.60, 0.70]}
@@ -53,6 +54,28 @@ def egypt_wheat(params: CropParams, root: str = EGYPT_ROOT) -> dict:
                 anthesis_sim_days=st.mean(r[2] for r in runs), anthesis_obs_days=st.mean(r[0].obs_adat for r in runs),
                 maturity_sim_days=st.mean(r[3] for r in runs), maturity_obs_days=st.mean(r[0].obs_mdat for r in runs),
                 by_site=by_site)
+
+
+# ------------------------------------------------------------------ wheat on the New Zealand sowing trials
+def nz_wheat(params: CropParams, root: str = NZ_ROOT) -> dict:
+    """50 rainfed or lightly irrigated treatments (sowing date x density) at Leeston and Wakanui, 2013-2018.
+    Density is not modelled, so within a site-year only sowing date moves the simulated yield."""
+    runs = []
+    for t, w in nzwheat.load_all(root):
+        s = simulate(w, t.site, t.mgmt, params).summary
+        if s.matured and t.obs_grain_t_ha:
+            runs.append((t, s))
+    by_year = {}
+    for key in sorted({(t.site_name, t.year) for t, _ in runs}):
+        rr = [(t, s) for t, s in runs if (t.site_name, t.year) == key]
+        by_year[f"{key[0]} {key[1]}"] = dict(n=len(rr), yield_sim=st.mean(s.yield_t_ha for _, s in rr),
+                                              yield_obs=st.mean(t.obs_grain_t_ha for t, _ in rr))
+    timing = [(t.obs_anthesis, s.anthesis_date, t.mgmt.sow_date) for t, s in runs if t.obs_anthesis and s.anthesis_date]
+    return dict(params=params.name, n=len(runs),
+                yield_fit=FitStats.from_pairs((t.obs_grain_t_ha, s.yield_t_ha) for t, s in runs),
+                pairs=[(t.obs_grain_t_ha, s.yield_t_ha) for t, s in runs], by_year=by_year,
+                n_anthesis=len(timing),
+                anthesis_bias_days=(st.mean((date.fromisoformat(sim) - obs).days for obs, sim, _ in timing) if timing else None))
 
 
 # ------------------------------------------------------------------ maize at Greeley
@@ -159,6 +182,10 @@ def reproduce(results_dir="results", docs_dir="docs", maize_loyo: bool = True) -
         stash("wheat_egypt", egypt_wheat(wheat), [wheat], [EGYPT_ROOT])
     else:
         manifest["skipped"]["wheat_egypt"] = f"{EGYPT_ROOT} missing"
+    if available(NZ_ROOT):
+        stash("wheat_nz", nz_wheat(wheat), [wheat], [NZ_ROOT])
+    else:
+        manifest["skipped"]["wheat_nz"] = f"{NZ_ROOT} missing (see docs/DATA-SOURCES.md)"
     if available(GREELEY_ROOT) and (Path(GREELEY_ROOT) / "LIRF_Soils.xlsx").exists():
         stash("maize_greeley_placeholder", greeley_maize(maize_pl), [maize_pl], [GREELEY_ROOT])
         stash("maize_greeley_calibrated_insample", greeley_maize(maize_gr), [maize_gr], [GREELEY_ROOT])

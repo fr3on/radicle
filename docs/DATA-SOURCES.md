@@ -43,6 +43,20 @@ Drip-irrigated maize at 40.45 N, 1425 m, 2008-2011, with daily weather, per-day 
 - **ET0:** radicle's FAO-56 Penman-Monteith agrees with the station's published ASCE grass ETo over 601 growing-season days (bias -0.13 mm/day, RMSE 0.41, r 0.97).
 - **Limits:** one site, four seasons, drip irrigation, no nitrogen, heat or salinity information. The driest plot (3.4 t/ha observed in 2011) is still predicted at 5.3. The fitted water productivity of 20 g/m2 versus about 34 in the literature points to unmodelled losses, not to a real maize value. Salinity is not tested by this dataset.
 
+## New Zealand winter wheat (50 sowing-date and density treatments, 2 sites, 6 seasons)
+Plant & Food Research trials at Leeston and Wakanui, 2013-2018, with daily weather (including wind and humidity), soil layers, irrigation events, daily leaf area index and biomass, anthesis and maturity dates, and grain yield. Source: [Harvard Dataverse, doi:10.7910/DVN/XA4VA2](https://doi.org/10.7910/DVN/XA4VA2). Loader: `src/radicle/ingest/nzwheat.py`. Unzip the download to `data/external/nz-wheat/`.
+
+**Licence is unclear:** Dataverse labels it CC0, but the dataset description says use is restricted by a consortium agreement and names Plant & Food Research as the contact. The data is git-ignored and not redistributed. Resolve this before publishing results.
+
+**Assumptions not in the data:** initial depletion 10%, initial ECe 0.5 dS/m, irrigation water EC 0.5 dS/m, rooting depth capped at 1 m. Density is not modelled.
+
+| Parameters | Yield bias (t/ha) | RMSE | r |
+|---|---|---|---|
+| `wheat` (placeholder) | -0.02 | 2.15 | -0.09 |
+
+- **Reading:** the near-zero bias is chance. The model has no skill across treatments here, and simulated anthesis comes about 125 days earlier than observed. These are long-season crops sown in February to April and harvested the next February, and radicle has no vernalisation or photoperiod response.
+- **Use:** a hard test for wheat phenology and the first dataset with measured leaf area and biomass over time.
+
 ## INVITE European wheat trials (473 trials: Czech Republic, Hungary, Switzerland)
 Rainfed winter wheat, 2003-2018. France is not loaded (weather files map by site code).
 
@@ -64,24 +78,27 @@ Six compartments, 5-minute data (temperature, PAR, CO2, humidity deficit, drain 
 - **Nitrogen, vernalisation, heat stress:** missing from the model; the European and Greeley results point to them.
 - **Hot, arid conditions:** the Nile set is the only one.
 
-## Leads not used yet
-All unverified: licences and contents are unchecked.
+## More datasets (licences checked)
+Licences below were read from the publisher or repository record (Crossref, Europe PMC, DataCite). A paper's licence covers the paper; check the data files themselves before redistributing.
 
-**Wheat and other field experiments**
-- [AgMIP-Wheat benchmark](https://library.wur.nl/ojs/index.php/ODJAR/article/view/14746) (Australia, Netherlands, India, Argentina; data DOI 10.17026/DANS-ZB6-6FVQ as reported) and [Martre et al. 2018](https://ars.usda.gov/ARSUserFiles/20200500/Pubs%202018/Martre%20et%20al.%20OpenAg2018.pdf). Includes the Hot Serial Cereal heat-stress experiment.
-- [CGIAR winter wheat nurseries](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8844391/) (downloadable, not Gulf).
-- [DSSAT experimental data](https://github.com/DSSAT/dssat-csm-data) (cotton, maize, rice, tomato) and the [Bushland, Texas maize collection](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11794518/).
-- [Faba bean and wheat intercropping, Lebanon and Morocco](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8989693/).
-- Egyptian papers: [Land 2021 (Sakha 95)](https://doi.org/10.3390/land10121375), [Agronomy 2024 (six cultivars)](https://doi.org/10.3390/agronomy14123057), [DSSAT-CERES Nile Delta](https://www.researchsquare.com/article/rs-10600368/v1), [maize sowing dates](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10415405/), [SALTMED tomato](https://www.researchgate.net/publication/322194676_Soil_Salinity_and_Tomato_Yield_Simulation_Using_SALTMED_Model_in_Drip_Irrigation). Asking the authors for trial and EC data is the practical route.
+| Dataset | Licence | Use |
+|---|---|---|
+| [AgMIP-Wheat pilot data](https://doi.org/10.17026/dans-zb6-6fvq) (Australia, Netherlands, India, Argentina; includes the Hot Serial Cereal heat experiment; [paper](https://library.wur.nl/ojs/index.php/ODJAR/article/view/14746), [Martre et al. 2018](https://ars.usda.gov/ARSUserFiles/20200500/Pubs%202018/Martre%20et%20al.%20OpenAg2018.pdf)) | CC0 | multi-site wheat phenology and growth |
+| [AgMIP high-yielding traits](https://doi.org/10.7910/DVN/VKWKUP) | CC0 | wheat; downloaded as one `.rar`, not opened |
+| [Bushland, Texas maize](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11794518/) | CC BY | second maize site with ET, growth and yield |
+| [Faba bean and wheat intercropping, Lebanon and Morocco](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8989693/) | CC BY | on-farm trials, Mediterranean |
+| [Maize sowing dates and irrigation levels](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10415405/) | CC BY | maize, Egypt |
+| [Wheat soil quality, yield and water productivity, Riyadh](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11174773/) | CC BY | wheat, Saudi Arabia |
+| [Saline irrigation 3 and 6 dS/m](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9431559/) | CC BY | salinity yield response, Egypt |
+| [Wheat drip vs surface irrigation, Agronomy 2022](https://doi.org/10.3390/agronomy12071488) | CC BY | wheat, Saudi Arabia |
+| Egyptian wheat papers: [Land 2021 (Sakha 95)](https://doi.org/10.3390/land10121375), [Agronomy 2024 (six cultivars)](https://doi.org/10.3390/agronomy14123057) | CC BY | trial tables; ask the authors for raw data and EC |
+| [Greenhouse challenge, lettuce](https://doi.org/10.4121/21960932.v1) | CC BY | greenhouse |
+| [Greenhouse challenge, cucumber](https://doi.org/10.4121/uuid:e4987a7b-04dd-4c89-9b18-883aad30ba9a) | CC0 | greenhouse |
 
-**Yield benchmarks (sanity checks, not calibration)**
-- Egypt national wheat yield about 6.3-6.9 t/ha: [USDA FAS](https://ipad.fas.usda.gov/countrysummary/Default.aspx?id=EG&crop=Wheat), [MDPI 2021](https://www.mdpi.com/2071-1050/11/16/4457) (2000-2020 mean 6.47 t/ha), [ICARDA yield-gap study](https://buscador.una.edu.ni/Record/CGSpace159593/Details).
-- Salinity affects roughly 30-35% of Egypt's irrigated land and cuts yields 10-40% ([Ahram](https://english.ahram.org.eg/NewsContent/3/12/562624/Business/Economy/Addressing-soil-salinity-important-to-safeguard-Eg.aspx)).
+**Not confirmed:** the [DSSAT experimental data](https://github.com/DSSAT/dssat-csm-data) repository declares no licence; the [CGIAR winter wheat nurseries](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8844391/) record returned no licence; [SALTMED tomato](https://www.researchgate.net/publication/322194676_Soil_Salinity_and_Tomato_Yield_Simulation_Using_SALTMED_Model_in_Drip_Irrigation) and the [Nile Delta DSSAT-CERES preprint](https://www.researchsquare.com/article/rs-10600368/v1) were not checked. The cherry tomato greenhouse edition and the salinity variables in the greenhouse sets are also unchecked.
 
-**Weather**
-- [Open-Meteo historical API](https://open-meteo.com/en/terms) (from 1940, free tier non-commercial, CC BY 4.0; read the terms) and NASA POWER (terms and fields not checked).
-- Israel: [IMS API](https://ims.gov.il/sites/default/files/2023-01/API_Explanation_en.pdf) (token may be required), [HDX precipitation summaries](https://data.humdata.org/dataset/daily-summaries-of-precipitation-indicators-for-israel). UAE: [NCM station statistics via Abu Dhabi open data](https://addata.gov.ae/group/national-center-meteorology) (statistics, maybe not daily series).
+**Yield benchmarks (sanity checks, not calibration).** Egypt national wheat yield is about 6.3-6.9 t/ha: [USDA FAS](https://ipad.fas.usda.gov/countrysummary/Default.aspx?id=EG&crop=Wheat), [MDPI 2021](https://www.mdpi.com/2071-1050/11/16/4457) (2000-2020 mean 6.47 t/ha, CC BY), [ICARDA yield-gap study](https://buscador.una.edu.ni/Record/CGSpace159593/Details). Salinity affects roughly 30-35% of Egypt's irrigated land and cuts yields 10-40% ([Ahram](https://english.ahram.org.eg/NewsContent/3/12/562624/Business/Economy/Addressing-soil-salinity-important-to-safeguard-Eg.aspx)). Soil EC in the north-eastern Delta averaged 6.1 dS/m in March and 9.6 in September 2022 ([Abuzaid et al. 2023](https://doi.org/10.3390/su15129440), CC BY, 70 topsoil samples, no crop data).
 
-**Gulf and Israel field data:** no open trial datasets found. Saudi sources are statistics and papers: [GASTAT surveys](https://www.stats.gov.sa/sites/default/files/Agricultural_Production_Survey_Publication_2021_EN_0.pdf), [AlUla open data](https://www.rcu.gov.sa/en/open-data-library/Agriculture-and-Soil-Data), [Estidamah open data](https://estidamah.gov.sa/en/about/e-participation/open-data/Pages/library.aspx), [wheat drip vs surface, Agronomy 2022](https://doi.org/10.3390/agronomy12071488), [deficit irrigation, Riyadh](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11174773/).
+**Weather.** [Open-Meteo historical API](https://open-meteo.com/en/terms) (from 1940, CC BY 4.0, free tier non-commercial); NASA POWER (terms not checked). Israel: [IMS API](https://ims.gov.il/sites/default/files/2023-01/API_Explanation_en.pdf) (token may be required), [HDX precipitation summaries](https://data.humdata.org/dataset/daily-summaries-of-precipitation-indicators-for-israel). UAE: [NCM station statistics](https://addata.gov.ae/group/national-center-meteorology) (statistics, maybe not daily).
 
-**Greenhouse (Wageningen Autonomous Greenhouse Challenge, via 4TU):** [cucumber](https://doi.org/10.4121/uuid:e4987a7b-04dd-4c89-9b18-883aad30ba9a), [lettuce](https://doi.org/10.4121/21960932.v1), and the cherry tomato edition (irrigation, drain samples, root-zone data). Salinity variables are not confirmed in any of them.
+**Gulf and Israel field data:** no open trial datasets found beyond the papers above. Saudi statistics: [GASTAT surveys](https://www.stats.gov.sa/sites/default/files/Agricultural_Production_Survey_Publication_2021_EN_0.pdf), [AlUla open data](https://www.rcu.gov.sa/en/open-data-library/Agriculture-and-Soil-Data), [Estidamah open data](https://estidamah.gov.sa/en/about/e-participation/open-data/Pages/library.aspx), [deficit irrigation, Riyadh](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11174773/).
