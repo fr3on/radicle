@@ -105,3 +105,49 @@ def test_nz_dataset_loads_and_simulates():
     r = nz_wheat(load_params("wheat"), str(NZ))
     assert r["n"] == 50 and set(r["by_year"]) >= {"Leeston 2013", "Wakanui 2018"}
     assert 7 < min(o for o, _ in r["pairs"]) and max(o for o, _ in r["pairs"]) < 17   # observed dry yields, t/ha
+
+
+GERMAN = Path(__file__).resolve().parents[1] / "data/external/zenodo-wheat-gxe"
+needs_german = pytest.mark.skipif(not (GERMAN / "Yield_data.csv").exists(), reason="German wheat dataset not downloaded")
+
+
+def _write_german_tables(root):
+    """Two cultivars, two treatments, one site, a six-day weather record with one two-day gap and one bad day."""
+    from datetime import timedelta
+    (Path(root) / "Yield_data.csv").write_text(
+        '"genotype","Year","Location","Treatment","Sowing_date","Heading_date_BBCH59","Thousand_kernel_weight(g)",'
+        '"Spike_number(m-2)","Kernels_per_Spike"\n'
+        '"A",2015,"KIE","HiN_HiF","2014-10-01","2015-06-01",50,400,40\n'
+        '"B",2015,"KIE","HiN_HiF","2014-10-03","2015-06-03",50,500,40\n'
+        '"C",2015,"KIE","HiN_HiF","2014-10-02","2015-06-02",NA,500,40\n'
+        '"A",2015,"KIE","HiN_NoF","2014-10-01","2015-06-01",50,300,40\n', encoding="latin-1")
+    days = [date(2014, 10, 1) + timedelta(days=i) for i in range(6)]
+    rows = ['"Location","Date","Temperature.Air.Mean_C","Temperature.Air.Min_C","Temperature.Air.Max_C",'
+            '"Precipitation_mm_d","Global.Radiation_MJ_m2_d"']
+    for i, d in enumerate(days):
+        if i in (2, 3):
+            continue                                        # a two-day gap: interpolated, rain 0
+        tmin, tmax = (8.0 + i, 14.0 + i) if i != 5 else (20.0, 10.0)   # last day is physically impossible: dropped
+        rows.append(f'"KIE",{d},{(tmin + tmax) / 2},{tmin},{tmax},2.0,8.0')
+    (Path(root) / "climate_data.csv").write_text("\n".join(rows) + "\n")
+
+
+def test_german_loader_summarises_cultivars_and_sprays(tmp_path):
+    from radicle.ingest import germanwheat
+    _write_german_tables(tmp_path)
+    trials = {t.treatment: (t, w) for t, w in germanwheat.load_all(tmp_path)}
+    t, w = trials["HiN_HiF"]
+    assert t.n_cultivars == 2 and t.obs_yield_t_ha == pytest.approx((8.0 + 10.0) / 2)   # 50*400*40/1e5 = 8.0 t/ha
+    assert t.mgmt.sow_date == date(2014, 10, 2) and t.obs_heading == date(2015, 6, 2)
+    assert t.mgmt.fungicide == {date(2015, 6, 2): germanwheat.SPRAY_EFFICACY}
+    assert trials["HiN_NoF"][0].mgmt.fungicide == {}
+    assert sorted(w) == [date(2014, 10, d) for d in range(1, 6)]   # two-day gap filled, impossible day dropped
+    assert w[date(2014, 10, 2)]["rain"] == 2.0 and w[date(2014, 10, 3)]["rain"] == 0.0
+
+
+@needs_german
+def test_german_dataset_loads_and_shows_fungicide_gain():
+    from radicle.experiments import german_wheat
+    from radicle.models.params import load_params
+    r = german_wheat(load_params("wheat"), str(GERMAN))
+    assert r["n"] >= 35 and r["fungicide_gain_obs"] > 1.0       # observed gain is about 1.5 t/ha

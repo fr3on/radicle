@@ -13,7 +13,7 @@ from pathlib import Path
 
 from . import __version__
 from .calibrate import fit_grid
-from .ingest import dssat, greeley, nzwheat
+from .ingest import dssat, germanwheat, greeley, nzwheat
 from .metrics import FitStats
 from .models.crop import simulate
 from .models.et0 import et0_daily
@@ -22,6 +22,7 @@ from .models.params import PARAMS_DIR, CropParams, load_params
 EGYPT_ROOT = "data/external/egypt-nile-wheat/x"
 GREELEY_ROOT = "data/external/greeley-maize"
 NZ_ROOT = "data/external/nz-wheat"
+GERMAN_ROOT = "data/external/zenodo-wheat-gxe"
 SITE_NAMES = {"ASWN": "Aswan", "BSUF": "Beni Suef", "MNFY": "Menofya", "SARS": "Sakha"}
 MAIZE_GRID = {"wp_g_m2": [14 + 2 * i for i in range(14)], "harvest_index": [0.40, 0.45, 0.50, 0.55, 0.60],
               "p_depletion": [0.40, 0.50, 0.60, 0.70]}
@@ -76,6 +77,38 @@ def nz_wheat(params: CropParams, root: str = NZ_ROOT) -> dict:
                 pairs=[(t.obs_grain_t_ha, s.yield_t_ha) for t, s in runs], by_year=by_year,
                 n_anthesis=len(timing),
                 anthesis_bias_days=(st.mean((date.fromisoformat(sim) - obs).days for obs, sim, _ in timing) if timing else None))
+
+
+# ------------------------------------------------------------------ wheat on the German fungicide x nitrogen trials
+def german_wheat(params: CropParams, root: str = GERMAN_ROOT) -> dict:
+    """Location x year x treatment means over about 220 cultivars. Nitrogen is not modelled, so the two no-fungicide
+    treatments simulate identically; the test of interest is the fungicide gain (HiN_HiF minus HiN_NoF)."""
+    sims, skipped = {}, []
+    for t, w in germanwheat.load_all(root):
+        try:
+            s = simulate(w, t.site, t.mgmt, params).summary
+        except ValueError as e:
+            skipped.append(dict(trial=f"{t.name} {t.treatment}", reason=str(e)))
+            continue
+        if s.matured:
+            sims[(t.location, t.year, t.treatment)] = (t, s)
+    gains = []
+    for (loc, yr, tr), (t, s) in sims.items():
+        base = sims.get((loc, yr, "HiN_NoF"))
+        if tr == germanwheat.FUNGICIDE and base:
+            gains.append(dict(trial=t.name, obs=t.obs_yield_t_ha - base[0].obs_yield_t_ha,
+                              sim=s.yield_t_ha - base[1].yield_t_ha))
+    by_treatment = {tr: dict(n=len(v), yield_obs=st.mean(t.obs_yield_t_ha for t, _ in v),
+                             yield_sim=st.mean(s.yield_t_ha for _, s in v))
+                    for tr in sorted({k[2] for k in sims}) if (v := [x for k, x in sims.items() if k[2] == tr])}
+    heading = [(date.fromisoformat(s.anthesis_date) - t.obs_heading).days for t, s in sims.values() if s.anthesis_date]
+    return dict(params=params.name, n=len(sims), skipped=skipped,
+                yield_fit=FitStats.from_pairs((t.obs_yield_t_ha, s.yield_t_ha) for t, s in sims.values()),
+                by_treatment=by_treatment, fungicide_gain=gains,
+                fungicide_gain_obs=st.mean(g["obs"] for g in gains) if gains else None,
+                fungicide_gain_sim=st.mean(g["sim"] for g in gains) if gains else None,
+                anthesis_minus_heading_days=st.mean(heading) if heading else None,
+                max_disease=max(s.final_disease or 0 for _, s in sims.values()) if sims else None)
 
 
 # ------------------------------------------------------------------ maize at Greeley
@@ -182,6 +215,10 @@ def reproduce(results_dir="results", docs_dir="docs", maize_loyo: bool = True) -
         stash("wheat_egypt", egypt_wheat(wheat), [wheat], [EGYPT_ROOT])
     else:
         manifest["skipped"]["wheat_egypt"] = f"{EGYPT_ROOT} missing"
+    if available(GERMAN_ROOT):
+        stash("wheat_german", german_wheat(wheat), [wheat], [GERMAN_ROOT])
+    else:
+        manifest["skipped"]["wheat_german"] = f"{GERMAN_ROOT} missing (see docs/DATA-SOURCES.md)"
     if available(NZ_ROOT):
         stash("wheat_nz", nz_wheat(wheat), [wheat], [NZ_ROOT])
     else:

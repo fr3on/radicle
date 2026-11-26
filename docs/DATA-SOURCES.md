@@ -57,6 +57,19 @@ Plant & Food Research trials at Leeston and Wakanui, 2013-2018, with daily weath
 - **Reading:** the near-zero bias is chance. The model has no skill across treatments here, and simulated anthesis comes about 125 days earlier than observed. These are long-season crops sown in February to April and harvested the next February, and radicle has no vernalisation or photoperiod response.
 - **Use:** a hard test for wheat phenology and the first dataset with measured leaf area and biomass over time.
 
+## German winter wheat, fungicide x nitrogen (42 location-year-treatment means, about 220 cultivars)
+Six sites (Kiel, Hannover, Quedlinburg, Kleine Altendorf, Rauischholzhausen, Gross Gerau), 2015-2017, rainfed. Treatments: high nitrogen with fungicide, high nitrogen without, low nitrogen without. Sowing date, heading date, yield components and daily weather (temperature, rain, radiation). Source: [Zenodo 10.5281/zenodo.8248543](https://zenodo.org/records/8248543), CC BY 4.0. Loader: `src/radicle/ingest/germanwheat.py`. Download `Yield_data.csv`, `climate_data.csv` and `read_me.csv` to `data/external/zenodo-wheat-gxe/`; the soil water file is simulated by the authors and not used.
+
+**Assumptions not in the data:** site coordinates and elevations (approximate), one generic soil (fc 0.30, wp 0.12, 1 m), wind 2 m/s, dew point equal to Tmin, rain 0 on interpolated gap days, one fungicide spray at heading with efficacy 0.8 (spray dates are not recorded). Yield is thousand-kernel weight x spikes per m2 x kernels per spike, median over cultivars with all three.
+
+| Parameters | Yield bias (t/ha) | RMSE | r | Fungicide gain, observed / simulated |
+|---|---|---|---|---|
+| `wheat` (placeholder) | +3.1 | 4.10 | -0.07 | +1.43 / 0.00 t/ha |
+
+- **Reading:** observed mean yield is 8.2 (high N, fungicide), 6.7 (high N, none) and 6.0 t/ha (low N, none). The model gives 10.1 for all three: nitrogen is not modelled, and the disease stays below 0.001, so fungicide changes nothing. Disease needs relative humidity of 85% or more, and the humidity here is an assumption from Tmin. This is untested rather than failed; real humidity data is needed before judging the disease module.
+- **Timing:** simulated anthesis comes about 30 days before observed heading, again without vernalisation or photoperiod.
+- **Skipped:** 3 Hannover 2015 trials, because of a weather gap longer than two days.
+
 ## INVITE European wheat trials (473 trials: Czech Republic, Hungary, Switzerland)
 Rainfed winter wheat, 2003-2018. France is not loaded (weather files map by site code).
 
