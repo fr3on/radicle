@@ -151,3 +151,17 @@ def test_german_dataset_loads_and_shows_fungicide_gain():
     from radicle.models.params import load_params
     r = german_wheat(load_params("wheat"), str(GERMAN))
     assert r["n"] >= 35 and r["fungicide_gain_obs"] > 1.0       # observed gain is about 1.5 t/ha
+
+
+def test_german_weather_uses_dwd_humidity_and_wind(tmp_path):
+    from radicle.ingest import germanwheat
+    _write_german_tables(tmp_path)
+    (tmp_path / "dwd").mkdir()
+    (tmp_path / "dwd" / "produkt_klima_tag_02564.txt").write_text(
+        "STATIONS_ID;MESS_DATUM;QN_3;  FX;  FM;QN_4; RSK;RSKF; SDK;SHK_TAG;  NM; VPM;  PM; TMK; UPM; TXK; TNK; TGK;eor\n"
+        "2564;20141001;5;6.0;4.0;-999;-999;-999;-999;-999;-999;-999;-999;-999;90.0;-999;-999;-999;eor\n"
+        "2564;20141002;5;6.0;-999;-999;-999;-999;-999;-999;-999;-999;-999;-999;-999;-999;-999;-999;eor\n")
+    w = germanwheat.load_weather(tmp_path)["KIE"]
+    d1, d2 = w[date(2014, 10, 1)], w[date(2014, 10, 2)]
+    assert d1["rh"] == 90.0 and d1["wind"] == pytest.approx(4.0 * germanwheat.WIND_10M_TO_2M)
+    assert d2["wind"] == germanwheat.WIND and d2["rh"] != 90.0     # -999 falls back to the assumptions

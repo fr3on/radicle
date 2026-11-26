@@ -60,13 +60,16 @@ Plant & Food Research trials at Leeston and Wakanui, 2013-2018, with daily weath
 ## German winter wheat, fungicide x nitrogen (42 location-year-treatment means, about 220 cultivars)
 Six sites (Kiel, Hannover, Quedlinburg, Kleine Altendorf, Rauischholzhausen, Gross Gerau), 2015-2017, rainfed. Treatments: high nitrogen with fungicide, high nitrogen without, low nitrogen without. Sowing date, heading date, yield components and daily weather (temperature, rain, radiation). Source: [Zenodo 10.5281/zenodo.8248543](https://zenodo.org/records/8248543), CC BY 4.0. Loader: `src/radicle/ingest/germanwheat.py`. Download `Yield_data.csv`, `climate_data.csv` and `read_me.csv` to `data/external/zenodo-wheat-gxe/`; the soil water file is simulated by the authors and not used.
 
-**Assumptions not in the data:** site coordinates and elevations (approximate), one generic soil (fc 0.30, wp 0.12, 1 m), wind 2 m/s, dew point equal to Tmin, rain 0 on interpolated gap days, one fungicide spray at heading with efficacy 0.8 (spray dates are not recorded). Yield is thousand-kernel weight x spikes per m2 x kernels per spike, median over cultivars with all three.
+**Humidity and wind** come from the nearest German Weather Service stations ([DWD open data](https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/), free use with attribution): Kiel-Holtenau 02564, Hannover 02014, Quedlinburg 04032, Frankfurt/Main 01420, Koenigswinter-Heiderhof 00603, Neu-Ulrichstein 07410. Copy their `produkt_klima_tag_<id>.txt` files into `data/external/zenodo-wheat-gxe/dwd/`. Wind is converted from 10 m to 2 m (x0.748). Without the files the loader falls back to dew point = Tmin and wind 2 m/s.
+
+**Other assumptions not in the data:** site coordinates and elevations (approximate), one generic soil (fc 0.30, wp 0.12, 1 m), rain 0 on interpolated gap days, one fungicide spray at heading with efficacy 0.8 (spray dates are not recorded). Yield is thousand-kernel weight x spikes per m2 x kernels per spike, median over cultivars with all three.
 
 | Parameters | Yield bias (t/ha) | RMSE | r | Fungicide gain, observed / simulated |
 |---|---|---|---|---|
-| `wheat` (placeholder) | +3.1 | 4.10 | -0.07 | +1.43 / 0.00 t/ha |
+| `wheat` (placeholder) | +3.2 | 4.21 | -0.09 | +1.43 / 0.00 t/ha |
 
-- **Reading:** observed mean yield is 8.2 (high N, fungicide), 6.7 (high N, none) and 6.0 t/ha (low N, none). The model gives 10.1 for all three: nitrogen is not modelled, and the disease stays below 0.001, so fungicide changes nothing. Disease needs relative humidity of 85% or more, and the humidity here is an assumption from Tmin. This is untested rather than failed; real humidity data is needed before judging the disease module.
+- **Reading:** observed mean yield is 8.2 (high N, fungicide), 6.7 (high N, none) and 6.0 t/ha (low N, none). The model gives 10.2 for all three. Nitrogen is not modelled. The fungicide gain is positive at all 13 site-years (0.4 to 2.7 t/ha), but the model shows none.
+- **Real humidity did not fix it.** With DWD humidity the highest simulated severity rises from 0.0003 to 0.0019, still negligible. Raising `dis_rate` to 0.4 gives severity 0.43 at the end of the season, but the fungicide gain stays under 0.005 t/ha, even with sprays every two weeks from 60 days before heading. The cause is the model, not the data: severity starts at 1e-4 on a logistic curve inside a short simulated season, so it only becomes large in the last days and costs almost no biomass. The disease module cannot produce a 1.4 t/ha loss without a structural change.
 - **Timing:** simulated anthesis comes about 30 days before observed heading, again without vernalisation or photoperiod.
 - **Skipped:** 3 Hannover 2015 trials, because of a weather gap longer than two days.
 

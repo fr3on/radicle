@@ -8,10 +8,13 @@ One Trial is one location x year x treatment, summarised over cultivars: median 
 median yield. Yield is thousand-kernel weight x spikes per m2 x kernels per spike, in dry t/ha; cultivars missing any
 component are dropped.
 
-Assumptions not in the data (all documented in docs/DATA-SOURCES.md): site coordinates and elevation (approximate,
-from public maps); one generic soil (fc 0.30, wp 0.12, 1 m); wind 2 m/s; dew point equal to the daily minimum
-temperature (humid climate); missing rain on a gap day is 0 and other gaps up to 2 days are interpolated; fungicide
-sprays at heading plus the offsets below, efficacy 0.8, because spray dates are not recorded."""
+Humidity and wind come from the nearest German Weather Service (DWD) stations when their daily files are in
+`<root>/dwd/produkt_klima_tag_<station>.txt` (open data, free use with attribution; see DWD_STATIONS). Without them,
+humidity is estimated from Tmin (dew point = Tmin) and wind is 2 m/s, both assumptions.
+
+Other assumptions (documented in docs/DATA-SOURCES.md): site coordinates and elevation (approximate, from public maps);
+one generic soil (fc 0.30, wp 0.12, 1 m); missing rain on a gap day is 0 and other gaps up to 2 days are interpolated;
+fungicide sprays at heading plus the offsets below, efficacy 0.8, because spray dates are not recorded."""
 import csv
 import statistics as st
 from dataclasses import dataclass
@@ -26,8 +29,10 @@ SITES = {  # (lat, elevation m): approximate
     "HAN": (52.38, 55), "KIE": (54.32, 30), "QLB": (51.79, 120)}
 NAMES = {"KAL": "Kleine Altendorf", "GGE": "Gross Gerau", "RHH": "Rauischholzhausen",
          "HAN": "Hannover", "KIE": "Kiel", "QLB": "Quedlinburg"}
+DWD_STATIONS = {"KAL": "00603", "GGE": "01420", "RHH": "07410", "HAN": "02014", "KIE": "02564", "QLB": "04032"}
+WIND_10M_TO_2M = 0.748         # FAO-56 eq. 47 for a 10 m anemometer over grass
 FC, WP = 0.30, 0.12
-WIND = 2.0
+WIND = 2.0                     # m/s, used only without DWD wind
 SPRAY_OFFSETS = (0,)          # days from heading
 SPRAY_EFFICACY = 0.8
 FUNGICIDE = "HiN_HiF"
@@ -65,8 +70,32 @@ def _rows(path):
         return list(csv.DictReader(f))
 
 
+def load_dwd(root):
+    """{location: {date: (relative humidity %, wind m/s at 2 m)}} from the DWD daily files that are present.
+    Missing values (-999) are left out."""
+    out = {}
+    for loc, station in DWD_STATIONS.items():
+        path = Path(root) / "dwd" / f"produkt_klima_tag_{station}.txt"
+        if not path.exists():
+            continue
+        with open(path, encoding="latin-1", newline="") as f:
+            rows = list(csv.reader(f, delimiter=";"))
+        head = [c.strip() for c in rows[0]]
+        i_date, i_rh, i_wind = head.index("MESS_DATUM"), head.index("UPM"), head.index("FM")
+        days = {}
+        for r in rows[1:]:
+            ds = r[i_date].strip()
+            rh, wind = float(r[i_rh]), float(r[i_wind])
+            days[date(int(ds[:4]), int(ds[4:6]), int(ds[6:]))] = (
+                rh if rh > -99 else None, wind * WIND_10M_TO_2M if wind > -99 else None)
+        out[loc] = days
+    return out
+
+
 def load_weather(root):
-    """{location: {date: weather}} in radicle units. Gaps of up to two days are interpolated (rain = 0)."""
+    """{location: {date: weather}} in radicle units. Gaps of up to two days are interpolated (rain = 0). Humidity
+    and wind come from DWD where available, else from the Tmin and 2 m/s assumptions."""
+    dwd = load_dwd(root)
     raw = {}
     for r in _rows(Path(root) / "climate_data.csv"):
         vals = [_num(r[k]) for k in ("Temperature.Air.Min_C", "Temperature.Air.Max_C", "Precipitation_mm_d",
@@ -77,8 +106,12 @@ def load_weather(root):
     out = {}
     for loc, days in raw.items():
         days = _fill(days)
-        out[loc] = {d: dict(tmin=tmin, tmax=tmax, rh=_rh(tmin, tmax), wind=WIND, rs=rs, rain=rain)
-                    for d, (tmin, tmax, rain, rs) in days.items()}
+        obs = dwd.get(loc, {})
+        out[loc] = {}
+        for d, (tmin, tmax, rain, rs) in days.items():
+            rh, wind = obs.get(d, (None, None))
+            out[loc][d] = dict(tmin=tmin, tmax=tmax, rh=max(5.0, min(100.0, rh)) if rh is not None else _rh(tmin, tmax),
+                               wind=max(0.1, wind) if wind is not None else WIND, rs=rs, rain=rain)
     return out
 
 
